@@ -1,11 +1,13 @@
-import { useState } from "react";
-import useEth from "../../contexts/EthContext/useEth";
+import { useState } from 'react';
+import useEth from '../../contexts/EthContext/useEth';
 
 function ContractBtns({ setValue }) {
-  const { state: { contract, accounts } } = useEth();
-  const [inputValue, setInputValue] = useState("");
+  const {
+    state: { contract, accounts },
+  } = useEth();
+  const [inputValue, setInputValue] = useState('');
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     if (/^\d+$|^$/.test(e.target.value)) {
       setInputValue(e.target.value);
     }
@@ -16,12 +18,12 @@ function ContractBtns({ setValue }) {
     setValue(value);
   };
 
-  const write = async e => {
-    if (e.target.tagName === "INPUT") {
+  const write = async (e) => {
+    if (e.target.tagName === 'INPUT') {
       return;
     }
-    if (inputValue === "") {
-      alert("Please enter a value to write.");
+    if (inputValue === '') {
+      alert('Please enter a value to write.');
       return;
     }
     const newValue = parseInt(inputValue);
@@ -30,20 +32,17 @@ function ContractBtns({ setValue }) {
 
   return (
     <div className="btns">
+      <button onClick={read}>read()</button>
 
-      <button onClick={read}>
-        read()
-      </button>
-
-      <div onClick={write} className="input-btn">
-        write(<input
+      <div className="input-btn">
+        <input
           type="text"
           placeholder="uint"
           value={inputValue}
-          onChange={handleInputChange}
-        />)
+          onChange={(e) => handleInputChange(e)}
+        />
+        <button onClick={(e) => write(e)}>write</button>
       </div>
-
     </div>
   );
 }

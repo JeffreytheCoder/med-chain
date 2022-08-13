@@ -10,7 +10,7 @@ import NoticeWrongNetwork from './NoticeWrongNetwork';
 
 function Demo() {
   const { state } = useEth();
-  const [value, setValue] = useState();
+  const [value, setValue] = useState('?');
 
   const demo = (
     <>
