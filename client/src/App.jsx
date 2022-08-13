@@ -6,13 +6,7 @@ import { useRoutes } from 'react-router-dom'
 function App() {
   const content = useRoutes(routes)
 
-  return (
-    <EthProvider>
-      <div id='App' className='container'>
-        {content}
-      </div>
-    </EthProvider>
-  )
+  return <EthProvider>{content}</EthProvider>
 }
 
 export default App
