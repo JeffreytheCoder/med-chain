@@ -10,6 +10,7 @@ const initialState = {
   networkID: null,
   contract: null,
   role: 'unknown',
+  loading: true,
 }
 
 const reducer = (state, action) => {

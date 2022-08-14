@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography, Backdrop, CircularProgress } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded'
 import VideoCover from 'react-video-cover'
@@ -11,7 +11,7 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded'
 
 const Home = () => {
   const {
-    state: { contract, accounts, role },
+    state: { contract, accounts, role, loading },
     dispatch,
   } = useEth()
   const navigate = useNavigate()
@@ -64,39 +64,54 @@ const Home = () => {
     }
   }
 
-  return (
-    <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' width='100vw' height='100vh'>
+  if (loading) {
+    return (
+      <Backdrop sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }} open={loading}>
+        <CircularProgress color='inherit' />
+      </Backdrop>
+    )
+  } else {
+    return (
       <Box
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          overflow: 'hidden',
-          top: 0,
-          left: 0,
-          zIndex: -1,
-        }}
+        display='flex'
+        flexDirection='column'
+        justifyContent='center'
+        alignItems='center'
+        width='100vw'
+        height='100vh'
       >
-        <VideoCover
-          videoOptions={{
-            src: GoldenGate,
-            autoPlay: true,
-            loop: true,
-            muted: true,
+        <Box
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            overflow: 'hidden',
+            top: 0,
+            left: 0,
+            zIndex: -1,
           }}
-        />
-      </Box>
-      <Typography variant='h3' fontWeight='800' color='white'>
-        MedChain
-      </Typography>
-      <Box mt={1} mb={2}>
-        <Typography variant='h4' color='white'>
-          Access to medical records everywhere, powered by Ethereum blockchain.
+        >
+          <VideoCover
+            videoOptions={{
+              src: GoldenGate,
+              autoPlay: true,
+              loop: true,
+              muted: true,
+            }}
+          />
+        </Box>
+        <Typography variant='h3' fontWeight='800' color='white'>
+          MedChain
         </Typography>
+        <Box mt={1} mb={2}>
+          <Typography variant='h4' color='white'>
+            Access to medical records everywhere, powered by Ethereum blockchain.
+          </Typography>
+        </Box>
+        <ActionSection />
       </Box>
-      <ActionSection />
-    </Box>
-  )
+    )
+  }
 }
 
 export default Home
