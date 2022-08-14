@@ -1,8 +1,8 @@
-import { Box, Alert } from '@mui/material';
-import useAlert from '../../contexts/AlertContext/useAlert';
+import { Box, Alert, Typography } from '@mui/material'
+import useAlert from '../../contexts/AlertContext/useAlert'
 
 const AlertPopup = () => {
-  const { text, type } = useAlert();
+  const { text, type } = useAlert()
 
   if (text && type) {
     return (
@@ -24,13 +24,13 @@ const AlertPopup = () => {
             paddingRight: '25px',
           }}
         >
-          {text}
+          <Typography variant='h6'>{text}</Typography>
         </Alert>
       </Box>
-    );
+    )
   } else {
-    return <></>;
+    return <></>
   }
-};
+}
 
-export default AlertPopup;
+export default AlertPopup

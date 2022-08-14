@@ -26,7 +26,7 @@ function EthProvider({ children }) {
       }
       dispatch({
         type: actions.init,
-        data: { artifact, web3, accounts, networkID, contract, role },
+        data: { artifact, web3, accounts, networkID, contract, role, loading: false },
       })
     }
   }, [])

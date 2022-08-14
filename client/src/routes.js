@@ -1,67 +1,46 @@
 // Guards
-import AuthGuard from './components/guards/AuthGuard'
-import PatientGuard from './components/guards/PatientGuard'
-import DoctorGuard from './components/guards/DoctorGuard'
 import Layout from './components/layouts/Layout'
 import AlertPopup from './components/layouts/AlertPopup'
 
 // Pages
 import Home from './pages'
-import RegisterDoctor from './pages/RegisterDoctor'
-
-// Patient
-import PatientAppointments from './pages/patient/appointments'
-import PatientRecords from './pages/patient/records'
-
-// Doctor
-import DoctorAppointments from './pages/doctor/appointments'
-import SearchRecords from './pages/doctor/search-records'
-import RegisterPatient from './pages/doctor/register-patient'
-import { AppBar } from '@mui/material'
+import Patient from './pages/patient'
+import Doctor from './pages/doctor'
+import HeaderAppBar from './components/layouts/Layout'
 
 const routes = [
   {
     path: '/',
-    // element: (
-    //   // <AuthGuard>
-    //   // <AlertPopup />
-    //   // </AuthGuard>
-    // ),
     children: [
-      { path: '', element: <Home /> },
-      { path: 'register-doctor', element: <RegisterDoctor /> },
+      {
+        path: '',
+        element: (
+          <>
+            <AlertPopup />
+            <Home />
+          </>
+        ),
+      },
       {
         path: 'patient',
-        // element: (
-        //   <PatientGuard>
-        //     <Layout />
-        //   </PatientGuard>
-        // ),
-        children: [
-          { path: 'appointments', element: <PatientAppointments /> },
-          { path: 'my-records', element: <PatientRecords /> },
-        ],
+        element: (
+          <>
+            <HeaderAppBar />
+            <AlertPopup />
+            <Patient />
+          </>
+        ),
       },
       {
         path: 'doctor',
-        // element: (
-        //   <DoctorGuard>
-        //     <Layout />
-        //   </DoctorGuard>
-        // ),
-        children: [
-          { path: 'appointments', element: <DoctorAppointments /> },
-          { path: 'patient-records', element: <SearchRecords /> },
-          { path: 'register-patient', element: <RegisterPatient /> },
-        ],
+        element: (
+          <>
+            <HeaderAppBar />
+            <AlertPopup />
+            <Doctor />
+          </>
+        ),
       },
-      {
-        path: 'layouts',
-        children: [
-          { path: 'AlertPopup', element: <AlertPopup />},
-          { path: 'Layout', element: <Layout />}
-        ]
-      }
     ],
   },
 ]
