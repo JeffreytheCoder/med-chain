@@ -6,6 +6,7 @@ import AlertPopup from './components/layouts/AlertPopup'
 import Home from './pages'
 import Patient from './pages/patient'
 import Doctor from './pages/doctor'
+import HeaderAppBar from './components/layouts/Layout'
 
 const routes = [
   {
@@ -23,19 +24,21 @@ const routes = [
       {
         path: 'patient',
         element: (
-          <Layout>
+          <>
+            <HeaderAppBar />
             <AlertPopup />
             <Patient />
-          </Layout>
+          </>
         ),
       },
       {
         path: 'doctor',
         element: (
-          <Layout>
+          <>
+            <HeaderAppBar />
             <AlertPopup />
             <Doctor />
-          </Layout>
+          </>
         ),
       },
     ],
