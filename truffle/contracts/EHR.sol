@@ -11,7 +11,7 @@ contract EHR {
 
   struct Patient {
     address id;
-    mapping (string => Record) records;
+    Record[] records;
   }
 
   struct Doctor {
@@ -59,18 +59,20 @@ contract EHR {
   }
 
   function addRecord(string memory _cid, string memory _fileName, address _patientId) public senderIsDoctor patientExists(_patientId) {
-    require(patients[_patientId].records[_cid].timeAdded == 0, "The record with this CID already exists.");
+    Record memory record = Record(_cid, _fileName, _patientId, msg.sender, block.timestamp);
+    patients[_patientId].records.push(record);
 
-    Record memory record = Record(_cid, _fileName, _patientId, msg.sender, block.timestamp); 
-    patients[_patientId].records[_cid] = record; 
-
-    emit RecordAdded(_cid, _patientId, msg.sender); 
+    emit RecordAdded(_cid, _patientId, msg.sender);
   } 
 
-  function getRecord(string memory _cid, address _patientId) public view senderExists patientExists(_patientId) returns (string memory, string memory, address, address, uint256) { 
-    Record memory record = patients[_patientId].records[_cid]; 
-    return (record.cid, record.fileName, record.patientId, record.doctorId, record.timeAdded); 
-  }
+  // function getRecord(string memory _cid, address _patientId) public view senderExists patientExists(_patientId) returns (string memory, string memory, address, address, uint256) { 
+  //   Record memory record = patients[_patientId].records[_cid]; 
+  //   return (record.cid, record.fileName, record.patientId, record.doctorId, record.timeAdded); 
+  // }
+
+  function getRecords(address _patientId) public view senderExists patientExists(_patientId) returns (Record[] memory) {
+    return patients[_patientId].records;
+  } 
 
   function getSenderRole() public view returns (string memory) {
     if (doctors[msg.sender].id == msg.sender) {
@@ -80,5 +82,9 @@ contract EHR {
     } else {
       return "unknown";
     }
+  }
+
+  function getPatientExists(address _patientId) public view senderIsDoctor returns (bool) {
+    return patients[_patientId].id == _patientId;
   }
 } 
