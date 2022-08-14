@@ -9,6 +9,9 @@ import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
 import useAlert from '../../contexts/AlertContext/useAlert'
 import AddRecordModal from './AddRecordModal'
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded'
+import ipfs from '../../ipfs'
+import { useEffect } from 'react'
+import Record from '../../components/Record'
 
 const Doctor = () => {
   const {
@@ -25,6 +28,10 @@ const Doctor = () => {
 
   const searchPatient = async () => {
     try {
+      if (!/^(0x)?[0-9a-f]{40}$/i.test(searchPatientAddress)) {
+        setAlert('Please enter a valid wallet address', 'error')
+        return
+      }
       const patientExists = await contract.methods.getPatientExists(searchPatientAddress).call({ from: accounts[0] })
       if (patientExists) {
         const records = await contract.methods.getRecords(searchPatientAddress).call({ from: accounts[0] })
@@ -41,7 +48,6 @@ const Doctor = () => {
 
   const registerPatient = async () => {
     try {
-      console.log('addPatientAddress :>> ', addPatientAddress)
       await contract.methods.addPatient(addPatientAddress).send({ from: accounts[0] })
     } catch (err) {
       console.error(err)
@@ -49,10 +55,23 @@ const Doctor = () => {
   }
 
   const addRecordCallback = useCallback(
-    async file => {
+    async (buffer, fileName, patientAddress) => {
+      console.log('patientAddress :>> ', patientAddress)
+      if (!patientAddress) {
+        setAlert('Please search for a patient first', 'error')
+        return
+      }
       try {
-        console.log('file :>> ', file)
+        const res = await ipfs.add(buffer)
+        const ipfsHash = res[0].hash
+        if (ipfsHash) {
+          console.log('ipfsHash, fileName,searchPatientAddress :>> ', ipfsHash, fileName, patientAddress)
+          await contract.methods.addRecord(ipfsHash, fileName, patientAddress).send({ from: accounts[0] })
+          setAlert('Record uploaded', 'success')
+          setAddRecord(false)
+        }
       } catch (err) {
+        setAlert('Record upload failed', 'error')
         console.error(err)
       }
     },
@@ -62,7 +81,11 @@ const Doctor = () => {
   return (
     <Box width='60%' my={5}>
       <Modal open={addRecord} onClose={() => setAddRecord(false)}>
-        <AddRecordModal handleClose={() => setAddRecord(false)} handleUpload={addRecordCallback} />
+        <AddRecordModal
+          handleClose={() => setAddRecord(false)}
+          handleUpload={addRecordCallback}
+          patientAddress={searchPatientAddress}
+        />
       </Modal>
 
       <Typography variant='h4'>Patient Records</Typography>
@@ -87,6 +110,22 @@ const Doctor = () => {
           <CloudUploadRoundedIcon style={{ color: 'white' }} />
         </CustomButton>
       </Box>
+
+      {patientExist && records.length === 0 && (
+        <Box display='flex' alignItems='center' justifyContent='center' my={5}>
+          <Typography variant='h5'>No records found</Typography>
+        </Box>
+      )}
+
+      {patientExist && records.length > 0 && (
+        <Box display='flex' flexDirection='column' mt={3} mb={-2}>
+          {records.map((record, index) => (
+            <Box mb={2}>
+              <Record key={index} record={record} />
+            </Box>
+          ))}
+        </Box>
+      )}
 
       <Box mt={6} mb={4}>
         <Divider />

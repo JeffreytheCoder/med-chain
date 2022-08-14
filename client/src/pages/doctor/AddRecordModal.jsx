@@ -5,9 +5,24 @@ import { Box, Chip, IconButton, Typography } from '@mui/material'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import useAlert from '../../contexts/AlertContext/useAlert'
 
-const AddRecordModal = ({ handleClose, handleUpload }) => {
+const AddRecordModal = ({ handleClose, handleUpload, patientAddress }) => {
   const { setAlert } = useAlert()
   const [file, setFile] = useState(null)
+  const [buffer, setBuffer] = useState(null)
+
+  const handleFileChange = fileObj => {
+    const { file } = fileObj
+    setBuffer(null)
+    setFile(file)
+    console.log('file.name :>> ', file.name)
+
+    const reader = new FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onloadend = () => {
+      const buffer = Buffer.from(reader.result)
+      setBuffer(buffer)
+    }
+  }
 
   return (
     <Box
@@ -40,15 +55,22 @@ const AddRecordModal = ({ handleClose, handleUpload }) => {
           <Typography variant='h4'>Add Record</Typography>
           <Box my={2}>
             <DropzoneAreaBase
-              onAdd={fileObjs => setFile(fileObjs[0])}
-              onDelete={fileObj => setFile(null)}
+              onAdd={fileObjs => handleFileChange(fileObjs[0])}
+              onDelete={fileObj => {
+                setFile(null)
+                setBuffer(null)
+              }}
               onAlert={(message, variant) => setAlert(message, variant)}
             />
           </Box>
           <Box display='flex' justifyContent='space-between' mb={2}>
-            {file && <Chip label={file.file.name} onDelete={() => setFile(null)} style={{ fontSize: '12px' }} />}
+            {file && <Chip label={file.name} onDelete={() => setFile(null)} style={{ fontSize: '12px' }} />}
             <Box flexGrow={1} />
-            <CustomButton text='upload' handleClick={() => handleUpload(file)} disabled={!file} />
+            <CustomButton
+              text='upload'
+              handleClick={() => handleUpload(buffer, file.name, patientAddress)}
+              disabled={!file || !buffer}
+            />
           </Box>
         </Box>
       </Box>

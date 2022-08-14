@@ -65,11 +65,6 @@ contract EHR {
     emit RecordAdded(_cid, _patientId, msg.sender);
   } 
 
-  // function getRecord(string memory _cid, address _patientId) public view senderExists patientExists(_patientId) returns (string memory, string memory, address, address, uint256) { 
-  //   Record memory record = patients[_patientId].records[_cid]; 
-  //   return (record.cid, record.fileName, record.patientId, record.doctorId, record.timeAdded); 
-  // }
-
   function getRecords(address _patientId) public view senderExists patientExists(_patientId) returns (Record[] memory) {
     return patients[_patientId].records;
   } 
