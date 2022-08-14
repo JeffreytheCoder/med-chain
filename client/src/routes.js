@@ -17,6 +17,7 @@ import PatientRecords from './pages/patient/records'
 import DoctorAppointments from './pages/doctor/appointments'
 import SearchRecords from './pages/doctor/search-records'
 import RegisterPatient from './pages/doctor/register-patient'
+import { AppBar } from '@mui/material'
 
 const routes = [
   {
@@ -54,6 +55,13 @@ const routes = [
           { path: 'register-patient', element: <RegisterPatient /> },
         ],
       },
+      {
+        path: 'layouts',
+        children: [
+          { path: 'AlertPopup', element: <AlertPopup />},
+          { path: 'Layout', element: <Layout />}
+        ]
+      }
     ],
   },
 ]
