@@ -1,146 +1,40 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';  
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import Grid from '@material-ui/core/Grid';
+import { AppBar, Chip, Toolbar, Box, Typography } from '@mui/material'
+import React from 'react'
+import useEth from '../../contexts/EthContext/useEth'
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded'
+import logo from '../../assets/tealNoBG-cropped.png'
+import { grey, teal } from '@mui/material/colors'
 
 const HeaderAppBar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const {
+    state: { accounts, role },
+  } = useEth()
 
   return (
-    <AppBar position="static" color="teal">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'white',
-              textDecoration: 'none',
-            }}
-          >
-            MedChain
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              
-            </Menu>
+    <AppBar position='static' style={{ backgroundColor: 'white' }}>
+      <Toolbar>
+        <Box display='flex' justifyContent='space-between' alignItems='center' width='100%'>
+          <a href='/'>
+            <img src={logo} alt='med-chain-logo' style={{ height: 20, weight: 20 }} />
+          </a>
+          <Box flexGrow={1} />
+          <Box display='flex' alignItems='center'>
+            <Box mb={0.1}>
+              <PersonRoundedIcon style={{ color: grey[700], fontSize: '22px' }} />
+            </Box>
+            <Box ml={0.5} mr={2}>
+              <Typography variant='h6' color='black'>
+                {accounts ? accounts[0] : 'Wallet not connected'}
+              </Typography>
+            </Box>
+            <Chip
+              label={role === 'unknown' ? 'not registered' : role}
+              style={{ fontSize: '12px', backgroundColor: teal['A700'], color: 'white' }}
+            />
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'roboto',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            MedChain
-          </Typography>
-          
-
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container justify="flex-end">
-              <Typography variant='h5' textAlign="center">
-                User id
-              </Typography >
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Grid>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
+        </Box>
+      </Toolbar>
     </AppBar>
-  );
-};
-export default HeaderAppBar;
+  )
+}
+export default HeaderAppBar

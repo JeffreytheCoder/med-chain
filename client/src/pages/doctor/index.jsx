@@ -85,99 +85,101 @@ const Doctor = () => {
     )
   } else {
     return (
-      <Box width='60%' my={5}>
-        {!accounts ? (
-          <Box display='flex' justifyContent='center'>
-            <Typography variant='h6'>Open your MetaMask wallet to get connected, then refresh this page</Typography>
-          </Box>
-        ) : (
-          <>
-            {role === 'unknown' && (
-              <Box display='flex' justifyContent='center'>
-                <Typography variant='h5'>You're not registered, please go to home page</Typography>
-              </Box>
-            )}
-            {role === 'patient' && (
-              <Box display='flex' justifyContent='center'>
-                <Typography variant='h5'>Only doctor can access this page</Typography>
-              </Box>
-            )}
-            {role === 'doctor' && (
-              <>
-                <Modal open={addRecord} onClose={() => setAddRecord(false)}>
-                  <AddRecordModal
-                    handleClose={() => setAddRecord(false)}
-                    handleUpload={addRecordCallback}
-                    patientAddress={searchPatientAddress}
-                  />
-                </Modal>
-
-                <Typography variant='h4'>Patient Records</Typography>
-                <Box display='flex' alignItems='center' my={1}>
-                  <FormControl fullWidth>
-                    <TextField
-                      variant='outlined'
-                      placeholder='Search patient by wallet address'
-                      value={searchPatientAddress}
-                      onChange={e => setSearchPatientAddress(e.target.value)}
-                      InputProps={{ style: { fontSize: '15px' } }}
-                      InputLabelProps={{ style: { fontSize: '15px' } }}
-                      size='small'
+      <Box display='flex' justifyContent='center' width='100vw'>
+        <Box width='60%' my={5}>
+          {!accounts ? (
+            <Box display='flex' justifyContent='center'>
+              <Typography variant='h6'>Open your MetaMask wallet to get connected, then refresh this page</Typography>
+            </Box>
+          ) : (
+            <>
+              {role === 'unknown' && (
+                <Box display='flex' justifyContent='center'>
+                  <Typography variant='h5'>You're not registered, please go to home page</Typography>
+                </Box>
+              )}
+              {role === 'patient' && (
+                <Box display='flex' justifyContent='center'>
+                  <Typography variant='h5'>Only doctor can access this page</Typography>
+                </Box>
+              )}
+              {role === 'doctor' && (
+                <>
+                  <Modal open={addRecord} onClose={() => setAddRecord(false)}>
+                    <AddRecordModal
+                      handleClose={() => setAddRecord(false)}
+                      handleUpload={addRecordCallback}
+                      patientAddress={searchPatientAddress}
                     />
-                  </FormControl>
-                  <Box mx={2}>
-                    <CustomButton text={'Search'} handleClick={() => searchPatient()}>
-                      <SearchRoundedIcon style={{ color: 'white' }} />
+                  </Modal>
+
+                  <Typography variant='h4'>Patient Records</Typography>
+                  <Box display='flex' alignItems='center' my={1}>
+                    <FormControl fullWidth>
+                      <TextField
+                        variant='outlined'
+                        placeholder='Search patient by wallet address'
+                        value={searchPatientAddress}
+                        onChange={e => setSearchPatientAddress(e.target.value)}
+                        InputProps={{ style: { fontSize: '15px' } }}
+                        InputLabelProps={{ style: { fontSize: '15px' } }}
+                        size='small'
+                      />
+                    </FormControl>
+                    <Box mx={2}>
+                      <CustomButton text={'Search'} handleClick={() => searchPatient()}>
+                        <SearchRoundedIcon style={{ color: 'white' }} />
+                      </CustomButton>
+                    </Box>
+                    <CustomButton text={'New Record'} handleClick={() => setAddRecord(true)} disabled={!patientExist}>
+                      <CloudUploadRoundedIcon style={{ color: 'white' }} />
                     </CustomButton>
                   </Box>
-                  <CustomButton text={'New Record'} handleClick={() => setAddRecord(true)} disabled={!patientExist}>
-                    <CloudUploadRoundedIcon style={{ color: 'white' }} />
-                  </CustomButton>
-                </Box>
 
-                {patientExist && records.length === 0 && (
-                  <Box display='flex' alignItems='center' justifyContent='center' my={5}>
-                    <Typography variant='h5'>No records found</Typography>
+                  {patientExist && records.length === 0 && (
+                    <Box display='flex' alignItems='center' justifyContent='center' my={5}>
+                      <Typography variant='h5'>No records found</Typography>
+                    </Box>
+                  )}
+
+                  {patientExist && records.length > 0 && (
+                    <Box display='flex' flexDirection='column' mt={3} mb={-2}>
+                      {records.map((record, index) => (
+                        <Box mb={2}>
+                          <Record key={index} record={record} />
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+
+                  <Box mt={6} mb={4}>
+                    <Divider />
                   </Box>
-                )}
 
-                {patientExist && records.length > 0 && (
-                  <Box display='flex' flexDirection='column' mt={3} mb={-2}>
-                    {records.map((record, index) => (
-                      <Box mb={2}>
-                        <Record key={index} record={record} />
-                      </Box>
-                    ))}
+                  <Typography variant='h4'>Register Patient</Typography>
+                  <Box display='flex' alignItems='center' my={1}>
+                    <FormControl fullWidth>
+                      <TextField
+                        variant='outlined'
+                        placeholder='Register patient by wallet address'
+                        value={addPatientAddress}
+                        onChange={e => setAddPatientAddress(e.target.value)}
+                        InputProps={{ style: { fontSize: '15px' } }}
+                        InputLabelProps={{ style: { fontSize: '15px' } }}
+                        size='small'
+                      />
+                    </FormControl>
+                    <Box mx={2}>
+                      <CustomButton text={'Register'} handleClick={() => registerPatient()}>
+                        <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
+                      </CustomButton>
+                    </Box>
                   </Box>
-                )}
-
-                <Box mt={6} mb={4}>
-                  <Divider />
-                </Box>
-
-                <Typography variant='h4'>Register Patient</Typography>
-                <Box display='flex' alignItems='center' my={1}>
-                  <FormControl fullWidth>
-                    <TextField
-                      variant='outlined'
-                      placeholder='Register patient by wallet address'
-                      value={addPatientAddress}
-                      onChange={e => setAddPatientAddress(e.target.value)}
-                      InputProps={{ style: { fontSize: '15px' } }}
-                      InputLabelProps={{ style: { fontSize: '15px' } }}
-                      size='small'
-                    />
-                  </FormControl>
-                  <Box mx={2}>
-                    <CustomButton text={'Register'} handleClick={() => registerPatient()}>
-                      <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
-                    </CustomButton>
-                  </Box>
-                </Box>
-              </>
-            )}
-          </>
-        )}
+                </>
+              )}
+            </>
+          )}
+        </Box>
       </Box>
     )
   }
