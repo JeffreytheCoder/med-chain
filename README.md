@@ -11,7 +11,7 @@
   <a href="#key-features">Key Features</a> •
   <a href="#architecture">Architecture</a> •
   <a href="#how-to-use">How To Use</a> •
-  <a href="#support">Support</a> •
+  <a href="#support">Support</a>
 </p>
 
 ## Key Features
