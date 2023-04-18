@@ -9,7 +9,7 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
-  <a href="#architecture">Architecture</a> •
+  <a href="#how-it-works">How It Works</a> •
   <a href="#how-to-use">How To Use</a> •
   <a href="#support">Support</a>
 </p>
@@ -25,7 +25,9 @@ On MedChain,
 - The health provider can search for a patient’s records using the address, and upload a new record for the patient. 
 - The patient can also view his or her records, after connected with a wallet which address is registered by the health provider.
 
-## Architecture
+This project is the 3rd place winner of [NextStep Hacks 2022](https://devpost.com/software/medchain-k4wzry).
+
+## How It Works
 
 There are three major components of MedChain:
 
