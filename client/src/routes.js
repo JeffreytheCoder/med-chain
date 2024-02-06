@@ -7,6 +7,7 @@ import Home from './pages'
 import Patient from './pages/patient'
 import Doctor from './pages/doctor'
 import HeaderAppBar from './components/layouts/Layout'
+import Unknown from './pages/unknown'
 
 const routes = [
   {
@@ -38,6 +39,16 @@ const routes = [
             <HeaderAppBar />
             <AlertPopup />
             <Doctor />
+          </>
+        ),
+      },
+      {
+        path: 'unknown',
+        element: (
+          <>
+            <HeaderAppBar />
+            <AlertPopup />
+            <Unknown />
           </>
         ),
       },

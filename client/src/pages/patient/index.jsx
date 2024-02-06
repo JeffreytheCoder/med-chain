@@ -19,7 +19,7 @@ const Patient = () => {
         setLoadingRecords(false)
       } catch (err) {
         console.error(err)
-        setLoadingRecords(false)
+        setLoadingRecords(true)
       }
     }
     getRecords()

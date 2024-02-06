@@ -1,4 +1,7 @@
+// SPDX-License-Identifier: MIT 
 pragma solidity >=0.4.22 <0.9.0;
+
+
 
 contract EHR { 
   struct Record { 
@@ -8,6 +11,8 @@ contract EHR {
     address doctorId;
     uint256 timeAdded;
   }
+
+  address private constant ADMIN = 0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1;
 
   struct Patient {
     address id;
@@ -42,6 +47,11 @@ contract EHR {
     _;
   }
 
+  modifier checkAdmin {
+    require(msg.sender == ADMIN, "Sender is not an ADMIN");
+    _;
+  }
+
   // functions
 
   function addPatient(address _patientId) public senderIsDoctor {
@@ -51,11 +61,11 @@ contract EHR {
     emit PatientAdded(_patientId);
   }
 
-  function addDoctor() public {
-    require(doctors[msg.sender].id != msg.sender, "This doctor already exists.");
-    doctors[msg.sender].id = msg.sender;
+  function addDoctor(address _doctorId) public checkAdmin {
+    require(doctors[_doctorId].id != _doctorId, "This doctor already exists.");
+    doctors[_doctorId].id = _doctorId;
 
-    emit DoctorAdded(msg.sender);
+    emit DoctorAdded(_doctorId);
   }
 
   function addRecord(string memory _cid, string memory _fileName, address _patientId) public senderIsDoctor patientExists(_patientId) {
@@ -74,6 +84,8 @@ contract EHR {
       return "doctor";
     } else if (patients[msg.sender].id == msg.sender) {
       return "patient";
+    } else if (msg.sender == ADMIN){
+      return "admin";
     } else {
       return "unknown";
     }

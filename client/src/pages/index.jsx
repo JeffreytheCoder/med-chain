@@ -1,4 +1,4 @@
-import { Box, Typography, Backdrop, CircularProgress, Divider } from '@mui/material'
+import { Box, Divider, FormControl, Modal, TextField, Typography, Backdrop, CircularProgress } from '@mui/material'
 import React from 'react'
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded'
 import VideoCover from 'react-video-cover'
@@ -10,9 +10,12 @@ import CustomButton from '../components/CustomButton'
 import { useNavigate } from 'react-router-dom'
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded'
 import { grey } from '@mui/material/colors'
+import { useState } from 'react'
 import '../App.css'
 
 const Home = () => {
+  const [doctorAddress,setDoctorAddress] = useState('')
+
   const {
     state: { contract, accounts, role, loading },
     dispatch,
@@ -21,10 +24,10 @@ const Home = () => {
 
   const registerDoctor = async () => {
     try {
-      await contract.methods.addDoctor().send({ from: accounts[0] })
-      dispatch({
-        type: 'ADD_DOCTOR',
-      })
+      await contract.methods.addDoctor(doctorAddress).send({ from: accounts[0] })
+      // dispatch({
+      //   type: 'ADD_DOCTOR',
+      // })
     } catch (err) {
       console.error(err)
     }
@@ -38,14 +41,27 @@ const Home = () => {
         </Typography>
       )
     } else {
-      if (role === 'unknown') {
+      if (role === 'admin') {
         return (
           <Box display='flex' flexDirection='column' alignItems='center'>
-            <Box mb={2}>
+            {/*<Box mb={2}>*/}
+              <Box display='flex' alignItems='center' my={1}>
+                    <FormControl fullWidth>
+                      <TextField
+                        variant='outlined'
+                        placeholder='Register Doctor by wallet address'
+                        value={doctorAddress}
+                        onChange={e => setDoctorAddress(e.target.value)}
+                        InputProps={{ style: { fontSize: '15px' } }}
+                        InputLabelProps={{ style: { fontSize: '15px' } }}
+                        size='small'
+                      />
+                    </FormControl>
+                  </Box>
               <CustomButton text='Doctor Register' handleClick={() => registerDoctor()}>
                 <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
               </CustomButton>
-            </Box>
+            {/*</Box>*/}
             <Typography variant='h5' color='white'>
               If you are a patient, ask your doctor to register for you
             </Typography>
@@ -63,7 +79,12 @@ const Home = () => {
             <LoginRoundedIcon style={{ color: 'white' }} />
           </CustomButton>
         )
+      }else{
+        return (
+            navigate('/unknown')
+        )
       }
+
     }
   }
 
