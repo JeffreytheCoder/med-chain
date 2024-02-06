@@ -45,7 +45,12 @@ const Doctor = () => {
 
   const registerPatient = async () => {
     try {
+      if (!/^(0x)?[0-9a-f]{40}$/i.test(addPatientAddress)) {
+        setAlert('Please enter a valid wallet address', 'error')
+        return
+      }
       await contract.methods.addPatient(addPatientAddress).send({ from: accounts[0] })
+        setAlert('Patient registered successfully!','success')
     } catch (err) {
       console.error(err)
     }

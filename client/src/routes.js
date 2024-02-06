@@ -8,6 +8,7 @@ import Patient from './pages/patient'
 import Doctor from './pages/doctor'
 import HeaderAppBar from './components/layouts/Layout'
 import Unknown from './pages/unknown'
+import Admin from './pages/admin'
 
 const routes = [
   {
@@ -19,6 +20,16 @@ const routes = [
           <>
             <AlertPopup />
             <Home />
+          </>
+        ),
+      },
+      {
+        path: 'admin',
+        element: (
+          <>
+            <HeaderAppBar />
+            <AlertPopup />
+            <Admin />
           </>
         ),
       },

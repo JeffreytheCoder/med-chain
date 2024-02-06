@@ -10,6 +10,7 @@ import CustomButton from '../components/CustomButton'
 import { useNavigate } from 'react-router-dom'
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded'
 import { grey } from '@mui/material/colors'
+import useAlert from '../contexts/AlertContext/useAlert'
 import { useState } from 'react'
 import '../App.css'
 
@@ -17,21 +18,11 @@ const Home = () => {
   const [doctorAddress,setDoctorAddress] = useState('')
 
   const {
-    state: { contract, accounts, role, loading },
+    state: { role, loading, accounts },
     dispatch,
   } = useEth()
-  const navigate = useNavigate()
 
-  const registerDoctor = async () => {
-    try {
-      await contract.methods.addDoctor(doctorAddress).send({ from: accounts[0] })
-      // dispatch({
-      //   type: 'ADD_DOCTOR',
-      // })
-    } catch (err) {
-      console.error(err)
-    }
-  }
+  const navigate = useNavigate()
 
   const ActionSection = () => {
     if (!accounts) {
@@ -43,29 +34,9 @@ const Home = () => {
     } else {
       if (role === 'admin') {
         return (
-          <Box display='flex' flexDirection='column' alignItems='center'>
-            {/*<Box mb={2}>*/}
-              <Box display='flex' alignItems='center' my={1}>
-                    <FormControl fullWidth>
-                      <TextField
-                        variant='outlined'
-                        placeholder='Register Doctor by wallet address'
-                        value={doctorAddress}
-                        onChange={e => setDoctorAddress(e.target.value)}
-                        InputProps={{ style: { fontSize: '15px' } }}
-                        InputLabelProps={{ style: { fontSize: '15px' } }}
-                        size='small'
-                      />
-                    </FormControl>
-                  </Box>
-              <CustomButton text='Doctor Register' handleClick={() => registerDoctor()}>
-                <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
-              </CustomButton>
-            {/*</Box>*/}
-            <Typography variant='h5' color='white'>
-              If you are a patient, ask your doctor to register for you
-            </Typography>
-          </Box>
+          <CustomButton text='Admin Portal' handleClick={() => navigate('/admin')}>
+            <LoginRoundedIcon style={{ color: 'white' }} />
+          </CustomButton>
         )
       } else if (role === 'patient') {
         return (

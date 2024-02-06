@@ -12,7 +12,7 @@ contract EHR {
     uint256 timeAdded;
   }
 
-  address private constant ADMIN = 0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1;
+  address private constant ADMIN = 0xe30e325e0da4338B992999388145566a36D0fe6B;
 
   struct Patient {
     address id;
