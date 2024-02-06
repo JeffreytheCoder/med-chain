@@ -1,21 +1,15 @@
-import { Box, Divider, FormControl, Modal, TextField, Typography, Backdrop, CircularProgress } from '@mui/material'
+import { Box, FormControl, TextField, Typography, Backdrop, CircularProgress } from '@mui/material'
 import React from 'react'
-import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded'
 import VideoCover from 'react-video-cover'
 import BackgroundVideo from '../assets/BackgroundVideo.mp4'
 import logo from '../assets/tealNoBG-cropped.png'
 import useEth from '../contexts/EthContext/useEth'
-import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
 import CustomButton from '../components/CustomButton'
 import { useNavigate } from 'react-router-dom'
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded'
-import { grey } from '@mui/material/colors'
-import useAlert from '../contexts/AlertContext/useAlert'
-import { useState } from 'react'
 import '../App.css'
 
 const Home = () => {
-  const [doctorAddress,setDoctorAddress] = useState('')
 
   const {
     state: { role, loading, accounts },

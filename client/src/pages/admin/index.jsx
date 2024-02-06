@@ -57,7 +57,7 @@ const [doctorAddress,setDoctorAddress] = useState('')
                 <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
               </CustomButton>
             {/*</Box>*/}
-            <Typography variant='h5' color='white'>
+            <Typography variant='h5' color='black'>
               If you are a patient, ask your doctor to register for you
             </Typography>
           </Box>
