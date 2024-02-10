@@ -10,6 +10,8 @@ import AddRecordModal from './AddRecordModal'
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded'
 import ipfs from '../../ipfs'
 import Record from '../../components/Record'
+import CryptoJS from "crypto-js";
+
 
 const Doctor = () => {
   const {
@@ -22,6 +24,8 @@ const Doctor = () => {
   const [addPatientAddress, setAddPatientAddress] = useState('')
   const [records, setRecords] = useState([])
   const [addRecord, setAddRecord] = useState(false)
+
+
 
   const searchPatient = async () => {
     try {
@@ -39,7 +43,7 @@ const Doctor = () => {
         setAlert('Patient does not exist', 'error')
       }
     } catch (err) {
-      console.error(err)
+      console.log(err)
     }
   }
 
@@ -63,6 +67,7 @@ const Doctor = () => {
         return
       }
       try {
+        
         const res = await ipfs.add(buffer)
         const ipfsHash = res[0].hash
         if (ipfsHash) {

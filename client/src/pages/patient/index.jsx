@@ -11,6 +11,8 @@ const Patient = () => {
   const [records, setRecords] = useState([])
   const [loadingRecords, setLoadingRecords] = useState(true)
 
+
+
   useEffect(() => {
     const getRecords = async () => {
       try {

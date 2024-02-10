@@ -4,24 +4,42 @@ import { DropzoneAreaBase } from 'material-ui-dropzone'
 import { Box, Chip, IconButton, Typography } from '@mui/material'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import useAlert from '../../contexts/AlertContext/useAlert'
+// import {skiffCrypto} from '@skiff-org/skiff-crypto'
+import CryptoJS from "crypto-js";
+ 
 
 const AddRecordModal = ({ handleClose, handleUpload, patientAddress }) => {
   const { setAlert } = useAlert()
   const [file, setFile] = useState(null)
   const [buffer, setBuffer] = useState(null)
 
+
+ 
   const handleFileChange = fileObj => {
     const { file } = fileObj
     setBuffer(null)
     setFile(file)
     console.log('file.name :>> ', file.name)
 
-    const reader = new FileReader()
-    reader.readAsArrayBuffer(file)
-    reader.onloadend = () => {
-      const buffer = Buffer.from(reader.result)
-      setBuffer(buffer)
-    }
+    var reader = new FileReader();
+    reader.onload = () => {
+        var key = "askfalq234234123kl4jlkfjalkdsfjq4j!@#LK%Ds#";
+        var wordArray = CryptoJS.lib.WordArray.create(reader.result);           // Convert: ArrayBuffer -> WordArray
+        var encrypted = CryptoJS.AES.encrypt(wordArray, key).toString();        // Encryption: I: WordArray -> O: -> Base64 encoded string (OpenSSL
+        const buff = Buffer.from(encrypted);
+        setBuffer(buff)
+        console.log(buff)
+
+        // var a = document.createElement("a");
+        // var url = window.URL.createObjectURL(fileEnc);
+        // var filename = file.name + ".enc";
+        // a.href = url;
+        // a.download = filename;
+        // a.click();
+        // window.URL.revokeObjectURL(url);
+    };
+    reader.readAsArrayBuffer(file);
+
   }
 
   return (
@@ -62,6 +80,7 @@ const AddRecordModal = ({ handleClose, handleUpload, patientAddress }) => {
               }}
               onAlert={(message, variant) => setAlert(message, variant)}
             />
+
           </Box>
           <Box display='flex' justifyContent='space-between' mb={2}>
             {file && <Chip label={file.name} onDelete={() => setFile(null)} style={{ fontSize: '12px' }} />}
@@ -71,9 +90,11 @@ const AddRecordModal = ({ handleClose, handleUpload, patientAddress }) => {
               handleClick={() => handleUpload(buffer, file.name, patientAddress)}
               disabled={!file || !buffer}
             />
+            
           </Box>
         </Box>
       </Box>
+                    
     </Box>
   )
 }
