@@ -4,6 +4,7 @@ import useEth from '../../contexts/EthContext/useEth'
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded'
 import logo from '../../assets/tealNoBG-cropped.png'
 import { grey, teal } from '@mui/material/colors'
+import '../../App.css'
 
 const HeaderAppBar = () => {
   const {
@@ -17,6 +18,16 @@ const HeaderAppBar = () => {
           <a href='/'>
             <img src={logo} alt='med-chain-logo' style={{ height: 20, weight: 20 }} />
           </a>
+          {role === 'doctor' && (
+            <>
+             <a className='register-patient-nav' href='/doctor/registerPatient'>
+             Register Patient
+              </a>
+               <a className='register-patient-nav' href='/doctor' style={{marginLeft:20}}>
+             Search Patient
+              </a>
+              </>
+            )}
           <Box flexGrow={1} />
           <Box display='flex' alignItems='center'>
             <Box mb={0.1}>

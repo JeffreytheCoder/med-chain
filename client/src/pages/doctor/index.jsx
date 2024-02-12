@@ -10,7 +10,6 @@ import AddRecordModal from './AddRecordModal'
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded'
 import ipfs from '../../ipfs'
 import Record from '../../components/Record'
-import CryptoJS from "crypto-js";
 
 
 const Doctor = () => {
@@ -21,7 +20,6 @@ const Doctor = () => {
 
   const [patientExist, setPatientExist] = useState(false)
   const [searchPatientAddress, setSearchPatientAddress] = useState('')
-  const [addPatientAddress, setAddPatientAddress] = useState('')
   const [records, setRecords] = useState([])
   const [addRecord, setAddRecord] = useState(false)
 
@@ -44,19 +42,6 @@ const Doctor = () => {
       }
     } catch (err) {
       console.log(err)
-    }
-  }
-
-  const registerPatient = async () => {
-    try {
-      if (!/^(0x)?[0-9a-f]{40}$/i.test(addPatientAddress)) {
-        setAlert('Please enter a valid wallet address', 'error')
-        return
-      }
-      await contract.methods.addPatient(addPatientAddress).send({ from: accounts[0] })
-        setAlert('Patient registered successfully!','success')
-    } catch (err) {
-      console.error(err)
     }
   }
 
@@ -84,7 +69,7 @@ const Doctor = () => {
         console.error(err)
       }
     },
-    [addPatientAddress, accounts, contract]
+    [searchPatientAddress, accounts, contract]
   )
 
   if (loading) {
@@ -108,7 +93,7 @@ const Doctor = () => {
                   <Typography variant='h5'>You're not registered, please go to home page</Typography>
                 </Box>
               )}
-              {role === 'patient' && (
+              {role === 'patient' || role === 'admin' && (
                 <Box display='flex' justifyContent='center'>
                   <Typography variant='h5'>Only doctor can access this page</Typography>
                 </Box>
@@ -161,30 +146,6 @@ const Doctor = () => {
                       ))}
                     </Box>
                   )}
-
-                  <Box mt={6} mb={4}>
-                    <Divider />
-                  </Box>
-
-                  <Typography variant='h4'>Register Patient</Typography>
-                  <Box display='flex' alignItems='center' my={1}>
-                    <FormControl fullWidth>
-                      <TextField
-                        variant='outlined'
-                        placeholder='Register patient by wallet address'
-                        value={addPatientAddress}
-                        onChange={e => setAddPatientAddress(e.target.value)}
-                        InputProps={{ style: { fontSize: '15px' } }}
-                        InputLabelProps={{ style: { fontSize: '15px' } }}
-                        size='small'
-                      />
-                    </FormControl>
-                    <Box mx={2}>
-                      <CustomButton text={'Register'} handleClick={() => registerPatient()}>
-                        <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
-                      </CustomButton>
-                    </Box>
-                  </Box>
                 </>
               )}
             </>

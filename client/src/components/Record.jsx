@@ -1,14 +1,11 @@
-import { Card, CardContent, IconButton, Typography, Grid, Box } from '@mui/material'
+import { Card, CardContent, Typography, Grid, Box } from '@mui/material'
 import React from 'react'
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded'
 import { grey } from '@mui/material/colors'
 import moment from 'moment'
 import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded'
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
 import CryptoJS from "crypto-js";
 import CustomButton from './CustomButton'
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 
 
 
@@ -16,7 +13,6 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 const Record = ({ record }) => {
   const [cid, name, patientId, doctorId, timestamp] = record
   // const [b64,setb64] = useState("")
-  const navigate = useNavigate()
 
   function convertWordArrayToUint8Array(wordArray) {
     var arrayOfWords = wordArray.hasOwnProperty("words") ? wordArray.words : [];

@@ -12,3 +12,18 @@
    align-items: center;
    justify-content: center;
 }
+
+.register-patient-nav{
+  position: relative;
+  left: 30px;
+  font-size: 15px;
+  background-color: aqua;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+}
+.register-patient-nav:hover{
+  color: white;
+}

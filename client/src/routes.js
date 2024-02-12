@@ -9,6 +9,7 @@ import Doctor from './pages/doctor'
 import HeaderAppBar from './components/layouts/Layout'
 import Unknown from './pages/unknown'
 import Admin from './pages/admin'
+import RegisterPatient from './pages/doctor/RegisterPatient'
 
 const routes = [
   {
@@ -50,6 +51,16 @@ const routes = [
             <HeaderAppBar />
             <AlertPopup />
             <Doctor />
+          </>
+        ),
+      },
+      {
+        path: 'doctor/registerPatient',
+        element: (
+          <>
+            <HeaderAppBar />
+            <AlertPopup />
+            <RegisterPatient />
           </>
         ),
       },
