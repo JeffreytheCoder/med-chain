@@ -96,7 +96,7 @@ const Doctor = () => {
         if (ipfsHash) {
           await contract.methods.addRecord(ipfsHash, fileName, patientAddress).send({ from: accounts[0] })
           setAlert('New record uploaded', 'success')
-          setAddRecord(false)
+          setAddRecord(true)
 
           // refresh records
           const records = await contract.methods.getRecordsDoctor(patientAddress).call({ from: accounts[0] })

@@ -68,7 +68,7 @@ contract EHR {
   modifier checkAccess(address patientId){
     bool access = false;
     for(uint i = 0; i < patients[patientId].permissions.length; i++){
-      Permission storage permission = patients[patientId].permissions[i];
+      Permission memory permission = patients[patientId].permissions[i];
       if(permission.doctorId == msg.sender){
         if(permission.access == true){
         access = true;
@@ -127,9 +127,8 @@ contract EHR {
 
   function grantAccess(address _doctorId,bool _access) public senderIsPatient doctorExists(_doctorId){
     for(uint i = 0; i < patients[msg.sender].permissions.length; i++){
-      Permission storage permission = patients[msg.sender].permissions[i];
-      if(permission.doctorId == _doctorId){
-        permission.access = _access;
+      if(patients[msg.sender].permissions[i].doctorId == _doctorId){
+        patients[msg.sender].permissions[i].access = _access;
         break;
       }
     }
@@ -140,9 +139,8 @@ contract EHR {
   function verifyAccess(address _patientId,address _doctorId) public view senderIsDoctor patientExists(_patientId) returns (bool){
      bool access = false;
     for(uint i = 0; i < patients[_patientId].permissions.length; i++){
-      Permission storage permission = patients[_patientId].permissions[i];
-      if(permission.doctorId == _doctorId){
-        if(permission.access == true){
+      if(patients[_patientId].permissions[i].doctorId == _doctorId){
+        if(patients[_patientId].permissions[i].access == true){
         access = true;
         break;
       }
