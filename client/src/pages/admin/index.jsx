@@ -12,7 +12,7 @@ const Admin = () => {
 const [doctorAddress,setDoctorAddress] = useState('')
 
   const {
-    state: { contract, accounts },
+    state: { contract, accounts, role },
     dispatch,
   } = useEth()
 
@@ -36,6 +36,8 @@ const [doctorAddress,setDoctorAddress] = useState('')
   }
 
    return (
+    <>
+      {role === 'admin' && (
           <div className='register-doctor'>
           <Box display='flex' flexDirection='column' alignItems='center'>
             {/*<Box mb={2}>*/}
@@ -61,7 +63,24 @@ const [doctorAddress,setDoctorAddress] = useState('')
               If you are a patient, ask your doctor to register for you
             </Typography>
           </Box>
-          </div>
+          </div> 
+
+        )}
+      {role === 'unknown' && (
+
+          <h1>unknown person</h1>
+        )}
+      {role === 'doctor' && (
+
+          <h1>doctor not allowed</h1>
+        )}
+
+      {role === 'patient' && (
+
+          <h1>patient not allowed</h1>
+        )}
+     
+          </>
         )
 
 }

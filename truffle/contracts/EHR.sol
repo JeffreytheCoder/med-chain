@@ -12,11 +12,17 @@ contract EHR {
     uint256 timeAdded;
   }
 
+  struct Permission{
+    bool access;
+    address doctorId;
+  }
+
   address private constant ADMIN = 0xe30e325e0da4338B992999388145566a36D0fe6B;
 
   struct Patient {
     address id;
     Record[] records;
+    Permission[] permissions;
   }
 
   struct Doctor {
@@ -29,6 +35,8 @@ contract EHR {
   event PatientAdded(address patientId);
   event DoctorAdded(address doctorId);
   event RecordAdded(string cid, address patientId, address doctorId); 
+  event RequestAdded(address patientId);
+  event AccessGranted(address doctorId);
 
   // modifiers
 
@@ -42,8 +50,34 @@ contract EHR {
     _;
   }
 
+   modifier doctorExists(address doctorId) {
+    require(doctors[doctorId].id == doctorId, "Doctor does not exist");
+    _;
+  }
+
+  modifier senderIsPatient{
+    require(patients[msg.sender].id == msg.sender, "Sender is not a patient");
+    _;
+  }
+
   modifier senderIsDoctor {
     require(doctors[msg.sender].id == msg.sender, "Sender is not a doctor");
+    _;
+  }
+
+  modifier checkAccess(address patientId){
+    bool access = false;
+    for(uint i = 0; i < patients[patientId].permissions.length; i++){
+      Permission storage permission = patients[patientId].permissions[i];
+      if(permission.doctorId == msg.sender){
+        if(permission.access == true){
+        access = true;
+        break;
+      }
+      }
+    }
+
+    require(access == true, "Access Denied");
     _;
   }
 
@@ -51,6 +85,8 @@ contract EHR {
     require(msg.sender == ADMIN, "Sender is not an ADMIN");
     _;
   }
+
+
 
   // functions
 
@@ -68,16 +104,67 @@ contract EHR {
     emit DoctorAdded(_doctorId);
   }
 
-  function addRecord(string memory _cid, string memory _fileName, address _patientId) public senderIsDoctor patientExists(_patientId) {
+
+  function requestAccess(address _patientId) public senderIsDoctor patientExists(_patientId){
+    Permission memory permission = Permission(false,msg.sender);
+    bool exists = false;
+    for(uint i = 0; i < patients[_patientId].permissions.length; i++){
+        if(patients[_patientId].permissions[i].doctorId == permission.doctorId){
+          exists = true;
+          break;
+        }
+    }
+    require(!exists,"request already exists!");
+    patients[_patientId].permissions.push(permission);
+  
+
+    emit RequestAdded(_patientId);
+  }
+
+  function getRequests(address _patientId) public view patientExists(_patientId) returns (Permission[] memory){
+    return patients[_patientId].permissions;
+  }
+
+  function grantAccess(address _doctorId,bool _access) public senderIsPatient doctorExists(_doctorId){
+    for(uint i = 0; i < patients[msg.sender].permissions.length; i++){
+      Permission storage permission = patients[msg.sender].permissions[i];
+      if(permission.doctorId == _doctorId){
+        permission.access = _access;
+        break;
+      }
+    }
+
+    emit AccessGranted(_doctorId);
+  }
+
+  function verifyAccess(address _patientId,address _doctorId) public view senderIsDoctor patientExists(_patientId) returns (bool){
+     bool access = false;
+    for(uint i = 0; i < patients[_patientId].permissions.length; i++){
+      Permission storage permission = patients[_patientId].permissions[i];
+      if(permission.doctorId == _doctorId){
+        if(permission.access == true){
+        access = true;
+        break;
+      }
+      }
+    }
+    return access;
+  }
+
+  function addRecord(string memory _cid, string memory _fileName, address _patientId) public senderIsDoctor patientExists(_patientId) checkAccess(_patientId) {
     Record memory record = Record(_cid, _fileName, _patientId, msg.sender, block.timestamp);
-    patients[_patientId].records.push(record);
+    patients[_patientId].records.push(record); 
 
     emit RecordAdded(_cid, _patientId, msg.sender);
   } 
 
-  function getRecords(address _patientId) public view senderExists patientExists(_patientId) returns (Record[] memory) {
+  function getRecords(address _patientId) public view patientExists(_patientId) returns (Record[] memory) {
     return patients[_patientId].records;
   } 
+
+  function getRecordsDoctor(address _patientId) public view senderIsDoctor patientExists(_patientId) returns (Record[] memory){
+    return patients[_patientId].records;
+  }
 
   function getSenderRole() public view returns (string memory) {
     if (doctors[msg.sender].id == msg.sender) {
