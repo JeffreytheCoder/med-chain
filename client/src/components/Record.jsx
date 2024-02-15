@@ -31,7 +31,10 @@ const Record = ({ record }) => {
 
  const fetchData = async () => {
       try {
-        const response = await fetch(`https://med-chain.infura-ipfs.io/ipfs/${cid}`);
+        const keyCID = "oiewrhg5623475vbeihc39873948^&%E@ZfytfE#&@^ tf1wufhx231277!*YE2"
+       const decryptedBytes = CryptoJS.AES.decrypt(cid, keyCID);
+        const decryptedCID = decryptedBytes.toString(CryptoJS.enc.Utf8);              // Decryption: I: Base64 encoded string (OpenSSL-format) -> O: WordArray
+        const response = await fetch(`https://med-chain.infura-ipfs.io/ipfs/${decryptedCID}`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

@@ -10,6 +10,8 @@ import AddRecordModal from './AddRecordModal'
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded'
 import ipfs from '../../ipfs'
 import Record from '../../components/Record'
+import CryptoJS from "crypto-js";
+
 
 
 
@@ -90,9 +92,15 @@ const Doctor = () => {
         return
       }
       try {
-        
+        const key = "oiewrhg5623475vbeihc39873948^&%E@ZfytfE#&@^ tf1wufhx231277!*YE2"
         const res = await ipfs.add(buffer)
-        const ipfsHash = res[0].hash
+        const ipfsHashValue = res[0].hash
+        const ipfsBytes = CryptoJS.enc.Utf8.parse(ipfsHashValue);
+        var ipfsHash = CryptoJS.AES.encrypt(ipfsBytes, key).toString();        // Encryption: I: WordArray -> O: -> Base64 encoded string (OpenSSL)
+        // console.log(ipfsHash)
+        // console.log(ipfsHashValue)
+       
+
         if (ipfsHash) {
           await contract.methods.addRecord(ipfsHash, fileName, patientAddress).send({ from: accounts[0] })
           setAlert('New record uploaded', 'success')
