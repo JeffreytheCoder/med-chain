@@ -28,6 +28,43 @@ const HeaderAppBar = () => {
               </a>
               </>
             )}
+           {role === 'admin' && (
+            <>
+             <a className='register-patient-nav' href='/admin/registerDoctor' >
+             Register Doctor
+              </a>
+               <a className='register-patient-nav' href='/admin/searchDoctor' style={{marginLeft:20}}>
+             Search Doctor
+              </a>
+              <a className='register-patient-nav' href='/admin/registerHospital' style={{marginLeft:20}}>
+             Register Hospital
+              </a>
+               <a className='register-patient-nav' href='/admin/searchHospital' style={{marginLeft:20}} >
+             Search Hospital
+              </a>
+              </>
+            )}
+           {role === 'patient' && (
+            <>
+              <a className='register-patient-nav' href='/patient/giveEmergencyAccess' >
+             Emergency Access
+              </a>
+               <a className='register-patient-nav' href='/patient/viewAccessRequests' style={{marginLeft:20}}>
+             Access Requests
+              </a>
+               <a className='register-patient-nav' href='/patient/viewEmergencyAccess' style={{marginLeft:20}}>
+             Manage Access
+              </a>
+              </>
+            )}
+           {role === 'emergencyPerson' && (
+              <>
+              <a className='register-patient-nav' href='/emergencyPerson/seeRequests' >
+             Emergency Requests
+              </a>
+              </>
+
+            )}
           <Box flexGrow={1} />
           <Box display='flex' alignItems='center'>
             <Box mb={0.1}>

@@ -1,10 +1,14 @@
-import { Box, Divider, FormControl, TextField, Typography, Backdrop, CircularProgress } from '@mui/material'
+import { Box, Divider, FormControl,Select,InputLabel,MenuItem, TextField, Typography, Backdrop, CircularProgress } from '@mui/material'
 import React from 'react'
 import { useState } from 'react'
 import CustomButton from '../../components/CustomButton'
 import useEth from '../../contexts/EthContext/useEth'
 import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
-import useAlert from '../../contexts/AlertContext/useAlert' 
+import useAlert from '../../contexts/AlertContext/useAlert'
+import validator from 'validator'
+import '../../App.css'
+import DoctorAccess from '../../components/access/doctorAccess'
+
 
   
   const RegisterPatient = () => {
@@ -14,6 +18,16 @@ import useAlert from '../../contexts/AlertContext/useAlert'
   const { setAlert } = useAlert()
 
   const [addPatientAddress, setAddPatientAddress] = useState('')
+  const [addPatientName,setAddPatientName] = useState('')
+  const [addPatientAge,setAddPatientAge] = useState('')
+  const [addPatientGender,setAddPatientGender] = useState('')
+  const [addPatientContact,setAddPatientContact] = useState('')
+  const [addPatientLocation,setAddPatientLocation] = useState('')
+  const [addPatientCause,setAddPatientCause] = useState('')
+
+
+
+
 
 
   const registerPatient = async () => {
@@ -22,9 +36,33 @@ import useAlert from '../../contexts/AlertContext/useAlert'
         setAlert('Please enter a valid wallet address', 'error')
         return
       }
-      await contract.methods.addPatient(addPatientAddress).send({ from: accounts[0] })
+      if(addPatientName == ""){
+        setAlert('Please enter valid Name','error')
+        return
+      }
+      if(addPatientAge == ""){
+        setAlert('Please enter valid Age','error')
+        return
+      }
+      if(addPatientGender == ""){
+        setAlert('Please enter valid gender','error')
+        return
+      }
+      if(!validator.isMobilePhone(addPatientContact)){
+        setAlert('Please enter valid mobile number','error')
+        return
+      }
+      if(addPatientLocation == ""){
+        setAlert('Please enter valid location','error')
+        return
+      }if(addPatientCause == ""){
+        setAlert('Please enter valid cause','error')
+        return
+      }
+      await contract.methods.addPatient(addPatientAddress,addPatientName,Number.parseInt(addPatientAge),addPatientGender,addPatientContact,addPatientLocation,addPatientCause).send({ from: accounts[0] })
         setAlert('Patient registered successfully!','success')
     } catch (err) {
+      setAlert('Registration failed!','error')
       console.error(err)
     }
   }
@@ -45,23 +83,12 @@ import useAlert from '../../contexts/AlertContext/useAlert'
             </Box>
           ) : (
             <>
-              {role === 'unknown' && (
-                <Box display='flex' justifyContent='center'>
-                  <Typography variant='h5'>You're not registered, please go to home page</Typography>
-                </Box>
-              )}
-              {role === 'patient' || role === 'admin' && (
-                <Box display='flex' justifyContent='center'>
-                  <Typography variant='h5'>Only doctor can access this page</Typography>
-                </Box>
-              )}
+             
               {role === 'doctor' && (
                 <>
-                  <Box mt={6} mb={4}>
-                    <Divider />
-                  </Box>
-
+          
                   <Typography variant='h4'>Register Patient</Typography>
+
                   <Box display='flex' alignItems='center' my={1}>
                     <FormControl fullWidth>
                       <TextField
@@ -74,14 +101,95 @@ import useAlert from '../../contexts/AlertContext/useAlert'
                         size='small'
                       />
                     </FormControl>
+                    </Box>
+                  <Box display='flex' alignItems='center' my={1}>
+                    <FormControl fullWidth>
+                      <TextField
+                        variant='outlined'
+                        placeholder='Enter patient name'
+                        value={addPatientName}
+                        onChange={e => setAddPatientName(e.target.value)}
+                        InputProps={{ style: { fontSize: '15px' } }}
+                        InputLabelProps={{ style: { fontSize: '15px' } }}
+                        size='small'
+                      />
+                    </FormControl>
+                    </Box>
+                  <Box display='flex' alignItems='center' my={1}>
+                    <FormControl fullWidth>
+                      <TextField
+                        variant='outlined'
+                        placeholder='Enter patient age'
+                        value={addPatientAge}
+                        onChange={e => setAddPatientAge(e.target.value)}
+                        InputProps={{ style: { fontSize: '15px' } }}
+                        InputLabelProps={{ style: { fontSize: '15px' } }}
+                        size='small'
+                      />
+                    </FormControl>
+                    </Box>
+                  <Box display='flex' alignItems='center' my={1}>
+                    <FormControl fullWidth>
+                      <InputLabel sx={{fontSize:"15px"}} id="demo-simple-select-label">Gender</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={addPatientGender}
+                        label="Gender"
+                        onChange={(e) => setAddPatientGender(e.target.value)}
+                        sx={{fontSize:"15px"}}
+                      >
+                        <MenuItem sx={{fontSize:"15px"}} value={"male"}>Male</MenuItem>
+                        <MenuItem sx={{fontSize:"15px"}} value={"female"}>Female</MenuItem>
+                        <MenuItem sx={{fontSize:"15px"}} value={"transgender"}>Transgender</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Box display='flex' alignItems='center' my={1}>
+                    <FormControl fullWidth>
+                      <TextField
+                        variant='outlined'
+                        placeholder='Enter patient mobile number'
+                        value={addPatientContact}
+                        onChange={e => setAddPatientContact(e.target.value)}
+                        InputProps={{ style: { fontSize: '15px' } }}
+                        InputLabelProps={{ style: { fontSize: '15px' } }}
+                        size='small'
+                      />
+                    </FormControl>
+                    </Box>
+                  <Box display='flex' alignItems='center' my={1}>
+                    <FormControl fullWidth>
+                      <textarea
+                        rows="8"
+                        cols="50"
+                        placeholder='Enter patient location'
+                        value={addPatientLocation}
+                        onChange={e => setAddPatientLocation(e.target.value)}
+                      ></textarea>
+                    </FormControl>
+                    </Box>
+                  <Box display='flex' alignItems='center' my={1}>
+                    <FormControl fullWidth>
+                      <TextField
+                        variant='outlined'
+                        placeholder='Enter patient problem'
+                        value={addPatientCause}
+                        onChange={e => setAddPatientCause(e.target.value)}
+                        InputProps={{ style: { fontSize: '15px' } }}
+                        InputLabelProps={{ style: { fontSize: '15px' } }}
+                        size='small'
+                      />
+                    </FormControl>
+                    </Box>
                     <Box mx={2}>
                       <CustomButton text={'Register'} handleClick={() => registerPatient()}>
                         <PersonAddAlt1RoundedIcon style={{ color: 'white' }} />
                       </CustomButton>
                     </Box>
-                  </Box>
                 </>
               )}
+              <DoctorAccess role={role}/>
             </>
           )}
         </Box>

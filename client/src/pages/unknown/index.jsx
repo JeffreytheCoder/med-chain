@@ -26,6 +26,9 @@ const Unknown = () => {
       } else if (role === 'doctor') {
       	return(navigate('/doctor'))
        	
+      }else if (role === 'emergencyPerson') {
+        return(navigate('/emergencyPerson/seeRequests'))
+        
       }else{
         return (
             <h1>Unknown</h1>

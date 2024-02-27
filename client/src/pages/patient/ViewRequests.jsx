@@ -3,45 +3,33 @@ import { Box, Typography, Backdrop, CircularProgress,RadioGroup, FormControl,For
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import CustomButton from '../../components/CustomButton'
 import useEth from '../../contexts/EthContext/useEth'
-import Record from '../../components/Record'
+import Request from '../../components/Request'
 import PatientAccess from '../../components/access/patientAccess'
 
 
-
-const Patient = () => {
+const ViewRequests = () => {
   const {
     state: { contract, accounts, role, loading },
   } = useEth()
 
-  const [records, setRecords] = useState([])
-  const [loadingRecords, setLoadingRecords] = useState(true)
+  const [requests,setRequests] = useState([])
+  const [viewRequest,setViewRequest] = useState(false)
 
 
 
-
-
-  useEffect(() => {
-
-    const getRecords = async () => {
-      try {
-        const records = await contract.methods.getRecords(accounts[0]).call({ from: accounts[0] })
-        // console.log(records)
-        setRecords(records)
-        setLoadingRecords(false)
-      } catch (err) {
+    const getRequests = async () => {
+      try{
+        const requests = await contract.methods.getRequests(accounts[0]).call({ from: accounts[0] })
+        // console.log(requests)
+        setRequests(requests)
+        setViewRequest(true)
+        return
+      }catch(err){
         console.error(err)
-        setLoadingRecords(true)
       }
     }
 
-      
-    getRecords()
-    
-    
-  })
-
-
-  if (loading || loadingRecords) {
+  if (loading) {
     return (
       <Backdrop sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }} open={loading}>
         <CircularProgress color='inherit' />
@@ -61,26 +49,31 @@ const Patient = () => {
             </Box>
           ) : (
             <>
-              
               {role === 'patient' && (
                 <>
-                  <Typography variant='h4'>My Records</Typography>
-
-                  {records.length === 0 && (
-                    <Box display='flex' alignItems='center' justifyContent='center' my={5}>
-                      <Typography variant='h5'>No records found</Typography>
+                  <Box mx={2}>
+                      <CustomButton text={'See Requests'} handleClick={() => getRequests()}>
+                        <SearchRoundedIcon style={{ color: 'white' }} />
+                      </CustomButton>
                     </Box>
-                  )}
-
-                  {records.length > 0 && (
-                    <Box display='flex' flexDirection='column' mt={3} mb={-2}>
-                      {records.map((record, index) => (
+                    {requests.length > 0 && viewRequest && (
+                      <>
+                         <Box display='flex' flexDirection='column' mt={3} mb={-2}>
+                      {requests.map((request, index) => (
                         <Box mb={2}>
-                          <Record key={index} record={record} />
+                          <Request key={index} request={request} />
                         </Box>
                       ))}
                     </Box>
-                  )}
+                    <Box mx={2}>
+                      <CustomButton text={'Close Requests'} handleClick={() => setViewRequest(false)}>
+                        <SearchRoundedIcon style={{ color: 'white' }} />
+                      </CustomButton>
+                    </Box>
+                    </>
+
+
+                      )}
                 </>
               )}
               <PatientAccess role={role}/>
@@ -92,4 +85,4 @@ const Patient = () => {
   }
 }
 
-export default Patient
+export default ViewRequests

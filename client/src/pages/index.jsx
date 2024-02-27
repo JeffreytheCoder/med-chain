@@ -44,6 +44,12 @@ const Home = () => {
             <LoginRoundedIcon style={{ color: 'white' }} />
           </CustomButton>
         )
+      }else if (role === 'emergencyPerson') {
+        return (
+          <CustomButton text='Emergency Portal' handleClick={() => navigate('/emergencyPerson/seeRequests')}>
+            <LoginRoundedIcon style={{ color: 'white' }} />
+          </CustomButton>
+        )
       }else{
         return (
             navigate('/unknown')

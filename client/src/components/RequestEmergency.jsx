@@ -12,8 +12,8 @@ import useAlert from '../contexts/AlertContext/useAlert'
 
 
 
-const Request = ({ request }) => {
-  const [access,doctorId] = request
+const RequestEmergency = ({ requestEmergency }) => {
+  const [access,doctorId] = requestEmergency
 
    const {
     state: { contract, accounts, role, loading },
@@ -24,7 +24,7 @@ const Request = ({ request }) => {
 
   const givePermission = async (doctorId,access) => {
     try{
-      await contract.methods.grantAccess(doctorId,access).send({ from: accounts[0] })
+      await contract.methods.giveEmergencyAccess(doctorId,access).send({ from: accounts[0] })
       if(access){
         setAlert("request granted","success")
       }
@@ -94,4 +94,4 @@ const Request = ({ request }) => {
 }
 
 
-export default Request
+export default RequestEmergency

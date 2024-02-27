@@ -62,6 +62,7 @@ const Record = ({ record }) => {
       }
     };
 
+
   return (
     <Card>
       <CardContent>
@@ -103,5 +104,6 @@ const Record = ({ record }) => {
     </Card>
   )
 }
+
 
 export default Record

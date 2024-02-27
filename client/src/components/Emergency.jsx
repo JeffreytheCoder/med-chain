@@ -12,8 +12,8 @@ import useAlert from '../contexts/AlertContext/useAlert'
 
 
 
-const Request = ({ request }) => {
-  const [access,doctorId] = request
+const Emergency = ({ emergency }) => {
+  const [personId,patientId,personName,personRelation,personContact,personLocation,access] = emergency
 
    const {
     state: { contract, accounts, role, loading },
@@ -22,14 +22,14 @@ const Request = ({ request }) => {
   const {setAlert} = useAlert()
   // const [b64,setb64] = useState("")
 
-  const givePermission = async (doctorId,access) => {
+  const giveAccess = async (personId,access) => {
     try{
-      await contract.methods.grantAccess(doctorId,access).send({ from: accounts[0] })
+      await contract.methods.manageEmergencyAccess(personId,access).send({ from: accounts[0] })
       if(access){
-        setAlert("request granted","success")
+        setAlert("access granted","success")
       }
       else{
-        setAlert("request rejected","error")
+        setAlert("access rejected","error")
       }
 
     }catch(err){
@@ -53,9 +53,29 @@ const Request = ({ request }) => {
           <Grid item xs={3}>
             <Box display='flex' flexDirection='column'>
               <Typography variant='h6' color={grey[600]}>
-                Request From
+                Person ID
               </Typography>
-              <Typography variant='h6'>{doctorId}</Typography>
+              <Typography variant='h6'>{personId}</Typography>
+              <Typography variant='h6' color={grey[600]}>
+                Patient ID
+              </Typography>
+              <Typography variant='h6'>{patientId}</Typography>
+               <Typography variant='h6' color={grey[600]}>
+                Person Name
+              </Typography>
+              <Typography variant='h6'>{personName}</Typography>
+              <Typography variant='h6' color={grey[600]}>
+                Relation
+              </Typography>
+              <Typography variant='h6'>{personRelation}</Typography>
+              <Typography variant='h6' color={grey[600]}>
+                Person Contact
+              </Typography>
+              <Typography variant='h6'>{personContact}</Typography>
+              <Typography variant='h6' color={grey[600]}>
+                Person Location
+              </Typography>
+              <Typography variant='h6'>{personLocation}</Typography>
             </Box>
           </Grid>
           <Grid item xs={10}>
@@ -73,10 +93,10 @@ const Request = ({ request }) => {
               </Typography>
                <Box mx={2} display='flex' flexDirection='row'>
                       <Stack direction="row" spacing={2}>
-      <Button variant="contained" color='error' value={doctorId} startIcon={<DeleteIcon />} onClick={(e) => givePermission(e.target.value,false)}>
+      <Button variant="contained" color='error' value={personId} startIcon={<DeleteIcon />} onClick={(e) => giveAccess(e.target.value,false)}>
         Reject
       </Button>
-      <Button variant="contained" color='success' value={doctorId} endIcon={<SendIcon />} onClick={(e) => givePermission(e.target.value,true)}>
+      <Button variant="contained" color='success' value={personId} endIcon={<SendIcon />} onClick={(e) => giveAccess(e.target.value,true)}>
         Accept
       </Button>
     </Stack>
@@ -94,4 +114,4 @@ const Request = ({ request }) => {
 }
 
 
-export default Request
+export default Emergency

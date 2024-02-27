@@ -11,6 +11,8 @@ import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded'
 import ipfs from '../../ipfs'
 import Record from '../../components/Record'
 import CryptoJS from "crypto-js";
+import Patient from '../../components/Patient'
+import DoctorAccess from '../../components/access/doctorAccess'
 
 
 
@@ -27,6 +29,7 @@ const Doctor = () => {
   const [addRecord, setAddRecord] = useState(false)
   const [requestPatientAddress,setRequestPatientAddress] = useState('')
   const [access,setAccess] = useState(false)
+  const [details,setDetails] = useState([])
 
 
   
@@ -44,6 +47,9 @@ const Doctor = () => {
         setAccess(access)
         if(access){
         // setAlert("you have access","success")
+        const details = await contract.methods.getPatient(searchPatientAddress).call({ from: accounts[0] })
+        console.log(details)
+        setDetails(details)
         const records = await contract.methods.getRecordsDoctor(searchPatientAddress).call({ from: accounts[0] })
         console.log('records :>> ', records)
         setRecords(records)
@@ -72,8 +78,13 @@ const Doctor = () => {
       const patientExists = await contract.methods.getPatientExists(requestPatientAddress).call({ from: accounts[0] })
       // console.log(requestPatientAddress)
       if(patientExists){
+        try{
         await contract.methods.requestAccess(requestPatientAddress).send({ from : accounts[0] })
         setAlert('request sent successfully!','success')
+      }catch(err){
+        setAlert("request already sent!",'error')
+        console.error(err)
+      }
       
     }
     else{
@@ -135,16 +146,6 @@ const Doctor = () => {
             </Box>
           ) : (
             <>
-              {role === 'unknown' && (
-                <Box display='flex' justifyContent='center'>
-                  <Typography variant='h5'>You're not registered, please go to home page</Typography>
-                </Box>
-              )}
-              {role === 'patient' || role === 'admin' && (
-                <Box display='flex' justifyContent='center'>
-                  <Typography variant='h5'>Only doctor can access this page</Typography>
-                </Box>
-              )}
               {role === 'doctor' && (
                 <>
                   <Modal open={addRecord} onClose={() => setAddRecord(false)}>
@@ -205,6 +206,14 @@ const Doctor = () => {
                     </>
 
                     )}
+                  {patientExist && access && (
+                     <Box display='flex' flexDirection='column' mt={3} mb={-2}>
+                        <Box mb={2}>
+                          <Patient patient={details} />
+                        </Box>
+                    </Box>
+
+                    )}
 
                   {patientExist && records.length === 0 && access && (
                     <Box display='flex' alignItems='center' justifyContent='center' my={5}>
@@ -223,6 +232,7 @@ const Doctor = () => {
                   )}
                 </>
               )}
+              <DoctorAccess role={role}/>
             </>
           )}
         </Box>
