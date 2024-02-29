@@ -2,12 +2,64 @@ import { Box, FormControl, TextField, Typography, Backdrop, CircularProgress } f
 import React from 'react'
 import VideoCover from 'react-video-cover'
 import BackgroundVideo from '../assets/BackgroundVideo.mp4'
-import logo from '../assets/tealNoBG-cropped.png'
+import logo from '../assets/MedBlock.png'
 import useEth from '../contexts/EthContext/useEth'
 import CustomButton from '../components/CustomButton'
 import { useNavigate } from 'react-router-dom'
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded'
 import '../App.css'
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
+function ResponsiveDialog() {
+  const [open, setOpen] = React.useState(true);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <Button variant="contained" onClick={handleClickOpen}>
+        View Information
+      </Button>
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle sx={{fontSize:20}} id="responsive-dialog-title">
+          {"Want to use Med-Block?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ fontSize:15}}>
+            You're not recognised as a authorized person for this system, Please contact respective person to learn more.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
+}
 
 const Home = () => {
 
@@ -17,6 +69,7 @@ const Home = () => {
   } = useEth()
 
   const navigate = useNavigate()
+
 
   const ActionSection = () => {
     if (!accounts) {
@@ -52,7 +105,12 @@ const Home = () => {
         )
       }else{
         return (
-            navigate('/unknown')
+          <>
+          {(
+            ResponsiveDialog()
+
+          )}
+            </>
         )
       }
 
@@ -96,8 +154,8 @@ const Home = () => {
             }}
           />
         </Box>
-        <Box id='home-page-box' display='flex' flexDirection='column' justifyContent='center' alignItems='center' p={5}>
-          <img src={logo} alt='med-chain-logo' style={{ height: 50 }} />
+        <Box id='home-page-box' display='flex' flexDirection='column' justifyContent='center' alignItems='center' p={3}>
+          <img src={logo} alt='med-chain-logo' style={{ height: 250 }} />
           <Box mt={2} mb={5}>
             <Typography variant='h4' color='white'>
               Own Your Health

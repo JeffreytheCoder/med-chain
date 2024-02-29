@@ -2,7 +2,7 @@ import { AppBar, Chip, Toolbar, Box, Typography } from '@mui/material'
 import React from 'react'
 import useEth from '../../contexts/EthContext/useEth'
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded'
-import logo from '../../assets/tealNoBG-cropped.png'
+import logo from '../../assets/MedBlock.png'
 import { grey, teal } from '@mui/material/colors'
 import '../../App.css'
 
@@ -16,7 +16,7 @@ const HeaderAppBar = () => {
       <Toolbar>
         <Box display='flex' justifyContent='space-between' alignItems='center' width='100%'>
           <a href='/'>
-            <img src={logo} alt='med-chain-logo' style={{ height: 20, weight: 20 }} />
+            <img src={logo} alt='med-chain-logo' style={{ height: 80, weight: 80 }} />
           </a>
           {role === 'doctor' && (
             <>
