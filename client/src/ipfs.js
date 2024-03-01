@@ -1,7 +1,7 @@
 const ipfsClient = require('ipfs-api')
 
-const projectId = '2DKPh21wsRUiB27R526EOCo4eUV'
-const projectSecret = '1bc14260235b4fb8844b4d86b0113876'
+const projectId = process.env.REACT_APP_IPFS_PROJECT_ID
+const projectSecret = process.env.REACT_APP_IPFS_PROJECT_SECRET
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
 
 const ipfs = ipfsClient({

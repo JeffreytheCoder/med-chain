@@ -68,6 +68,13 @@ $ npm install
 $ npm start
 ```
 
+Add your IPFS project ID and secret to `.env`.
+
+```
+REACT_APP_IPFS_PROJECT_ID={YOUR_IPFS_PROJECT_ID}
+REACT_APP_IPFS_PROJECT_SECRET={YOUR_IPFS_PROJECT_SECRET}
+```
+
 You should be able to see the application running at http://localhost:3000.
 
 
