@@ -68,7 +68,7 @@ $ npm install
 $ npm start
 ```
 
-Add your IPFS project ID and secret to `.env`.
+Add your Infura IPFS project ID and secret to `.env`. You can create an project [here](https://www.infura.io/).
 
 ```
 REACT_APP_IPFS_PROJECT_ID={YOUR_IPFS_PROJECT_ID}
